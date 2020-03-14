@@ -10,16 +10,12 @@ class BooksController < ApplicationController
     @book = Book.find(params[:id])
   end
 
-  def new
-  	@book =Book.new
-  end
-
   def create
 # ストロングパラメーター使用
        @book = Book.new(book_params)
        @books = Book.all
      if @book.save
-       flash.now[:create]= 'Book was successfully successfully.'
+       flash[:create]= 'Book was successfully created.'
        redirect_to book_path(@book.id)
      else
        render action: :index
