@@ -16,10 +16,17 @@ class BooksController < ApplicationController
 
   def create
 # ストロングパラメーター使用
-  	book = Book.new(book_params)
-  	book.save
-  	redirect_to book_path(book.id)
-  end
+  	@book = Book.new(book_params)
+    if @book.save
+      flash[:complete]="creates item!"
+
+        format.html { redirect_to @book, notice: 'Item was successfully created.' }
+        format.json { render :show, status: :created, location: @book }
+      else
+        format.html { render :new }
+        format.json { render json: @book.errors, status: :unprocessable_entity }
+      end
+    end
 
   def edit
     @book = Book.find(params[:id])
