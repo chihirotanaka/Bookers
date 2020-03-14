@@ -1,4 +1,6 @@
-　<%= flash[:complete] %>
+<%= flash[:destroy] %>
+<p id="notice"><%= notice %></p>
+<%= flash[:create] %>
 <p id="notice"><%= notice %></p>
 
 <h3>Books</h3>
@@ -20,8 +22,7 @@
   		<td><%= book.body %></td>
   		<td><%= link_to "Show","/books/#{book.id}"%></td>
   		<td> <%= link_to "Edit", "/books/#{book.id}/edit"%></td>
-  		<td><%= link_to "Destroy", "/books/#{book.id}/", 
-	      method: :delete, "data-confirm" => "Are you sure?" %></td>
+  		<td><%= link_to "Destroy", book_path(book.id), method: :delete, "data-confirm" => "Are you sure?" %></td>
   	</tr>
   	<% end %>
   </tbody>
@@ -29,12 +30,18 @@
 
 <br>
 <!-- 2段目 -->
-
 <table>
+ <% if @book.errors.any? %>
+    <ul>
+      <% @book.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+<% end %>
 
 <h3>New book</h3>
 
-<%= form_for(@book, url:'/books') do |f|%>
+<%= form_for(@book) do |f|%>
 
 <h6>Title</h6>
 <%= f.text_field :title%>

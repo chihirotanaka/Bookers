@@ -16,17 +16,15 @@ class BooksController < ApplicationController
 
   def create
 # ストロングパラメーター使用
-  	@book = Book.new(book_params)
-    if @book.save
-      flash[:complete]="creates item!"
-
-        format.html { redirect_to @book, notice: 'Item was successfully created.' }
-        format.json { render :show, status: :created, location: @book }
-      else
-        format.html { render :new }
-        format.json { render json: @book.errors, status: :unprocessable_entity }
-      end
+       @book = Book.new(book_params)
+       @books = Book.all
+     if @book.save
+       flash.now[:create]= 'Book was successfully successfully.'
+       redirect_to book_path(@book.id)
+     else
+       render action: :index
     end
+  end
 
   def edit
     @book = Book.find(params[:id])
@@ -34,16 +32,20 @@ class BooksController < ApplicationController
 
 # ２つ追加して記入
   def update
-    book = Book.find(params[:id])
-    book.update(book_params)
-    redirect_to book_path
+     if book = Book.find(params[:id])
+        book.update(book_params)
+        flash[:update]= 'Book was successfully update.'
+        redirect_to book_path
+     end
   end
 
   def destroy
-    book = Book.find(params[:id])
-    book.destroy
-    redirect_to books_path
+    if book = Book.find(params[:id])
+       book.destroy
+       flash[:destroy]= 'Book was successfully destroyed.'
+       redirect_to books_path
   end
+end
 # ここまで
 
 private
@@ -51,5 +53,4 @@ private
   def book_params
      params.require(:book).permit(:title, :body)
   end
-
 end
